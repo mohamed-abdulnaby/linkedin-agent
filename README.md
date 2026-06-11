@@ -50,6 +50,17 @@ If you prefer not to run a local model, you can use the OpenAI API. The script w
    ```
 3. Run the script. The agent will automatically use `gpt-4o-mini` for all operations.
 
+## Customizing Post Restrictions
+
+The agent uses a prompt to evaluate whether a post is relevant. By default, it filters out job postings and looks for posts about:
+1. Someone celebrating being hired or getting a promotion.
+2. The telecommunications (telecom) industry.
+3. Java or general programming.
+
+To change these restrictions, you need to modify the `prompt` variable in the `linkedin_agent.py` file. Update the criteria in the prompt text in the following two functions:
+- `ask_ollama`
+- `ask_openai`
+
 ## Usage
 
 To start the agent, run:
