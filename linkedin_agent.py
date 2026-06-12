@@ -218,16 +218,27 @@ def main():
                                 print("❌ Could not re-locate post. Skipping.")
                                 continue
 
-                            # 1. Like the post
+                            # 1. React with Celebrate
                             like_btn = current_post.query_selector('button[aria-pressed="false"].react-button__trigger')
                             if like_btn:
                                 try:
-                                    like_btn.click()
+                                    like_btn.hover()
+                                    page.wait_for_timeout(1500)  # Wait for the reactions popup
+                                    
+                                    # LinkedIn's celebrate button usually has an aria-label containing "Celebrate"
+                                    # The popup might be rendered outside the post container, so we query the page
+                                    celebrate_btn = page.query_selector('button[aria-label*="Celebrate"]')
+                                    if celebrate_btn and celebrate_btn.is_visible():
+                                        celebrate_btn.click()
+                                        print("Reacted with Celebrate!")
+                                    else:
+                                        like_btn.click()
+                                        print("Liked the post! (Fallback)")
+                                        
                                     actions_state['reactions_made_today'] += 1
-                                    print("Liked the post!")
                                     human_delay()
                                 except Exception as e:
-                                    print(f"Could not click like button: {e}")
+                                    print(f"Could not react to the post: {e}")
                             
                             # 2. Click comment button to open text box
                             # The first button with the text "Comment" is the action button on the post header
